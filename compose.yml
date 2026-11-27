@@ -20,9 +20,11 @@ services:
     ports:
       - "8000:8000"
     environment:
-      DATABASE_URL: postgresql://admin:TestPassword@db:5432/sis_ops
+      DATABASE_URL: dbname=sis_ops user=postgres password=TestPassword host=database
     volumes:
       - ./backend:/app
+    networks:
+      - testnet
 
 volumes:
   postgres_data:
