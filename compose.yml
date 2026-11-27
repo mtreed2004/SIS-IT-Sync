@@ -1,0 +1,33 @@
+services:
+  database:
+    image: postgres:16-alpine
+    container_name: postgres_db
+    environment:
+      POSTGRES_PASSWORD: TestPassword
+      POSTGRES_DB: sis_ops
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - testnet
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://admin:TestPassword@db:5432/sis_ops
+    volumes:
+      - ./backend:/app
+
+volumes:
+  postgres_data:
+
+networks:
+  testnet:
+    driver: bridge
+  
